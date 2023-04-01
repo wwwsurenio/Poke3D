@@ -35,7 +35,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if let imageToTrack = ARReferenceImage.referenceImages(inGroupNamed: "PokemonCards", bundle: Bundle.main){
             
             configuration.trackingImages = imageToTrack
-            configuration.maximumNumberOfTrackedImages = 1
+            configuration.maximumNumberOfTrackedImages = 2
             
             print("Images succesfully added")
             
@@ -55,12 +55,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // MARK: - ARSCNViewDelegate
+    
+    var cardName = [""]
    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         
         let node = SCNNode()
         
         if let imageAnchor = anchor as? ARImageAnchor{
+            
+            cardName = imageAnchor.referenceImage.name!.components(separatedBy: "-")
             
             let plane = SCNPlane(
                 width: imageAnchor.referenceImage.physicalSize.width,
@@ -74,7 +78,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             node.addChildNode(planeNode)
             
-            if let pokeScene = SCNScene(named: "art.scnassets/eevee.scn"){
+            if let pokeScene = SCNScene(named: "art.scnassets/\(cardName)"){
                 
                 if let pokeNode = pokeScene.rootNode.childNodes.first{
                     
